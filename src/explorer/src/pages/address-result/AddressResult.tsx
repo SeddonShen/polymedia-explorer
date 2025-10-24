@@ -16,6 +16,10 @@ import { PageHeader } from "~/ui/PageHeader";
 import { LOCAL_STORAGE_SPLIT_PANE_KEYS, SplitPanes } from "~/ui/SplitPanes";
 import { TabHeader } from "~/ui/Tabs";
 import { TotalStaked } from "./TotalStaked";
+import { Card } from "~/ui/Card";
+import { TableHeader } from "~/ui/TableHeader";
+import { TableCard } from "~/ui/TableCard";
+import { AddressLink, ObjectLink } from "~/ui/InternalLink";
 
 const LEFT_RIGHT_PANEL_MIN_SIZE = 30;
 const TOP_PANEL_MIN_SIZE = 20;
@@ -43,6 +47,38 @@ function SuiNSAddressResultPageHeader({ name }: { name: string }) {
 
 function AddressResult({ address }: { address: string }) {
 	const isMediumOrAbove = useBreakpoint("md");
+
+	// 子地址列表（示例数据：0x1 到 0x10）
+	const subAddressesData = Array.from({ length: 10 }, (_, i) => ({
+		address: `0x${i + 1}`,
+		tokenCount: (i + 1) * 10,
+		completed: i % 2 === 0,
+		objectId: `0xobject${i + 1}`,
+	}));
+
+	const subAddressesColumns = [
+		{
+			header: "子地址",
+			accessorKey: "address",
+			cell: ({ getValue }: any) => <AddressLink address={getValue()} noTruncate />,
+		},
+		{
+			header: "代币个数",
+			accessorKey: "tokenCount",
+			enableSorting: true,
+		},
+		{
+			header: "是否已完成",
+			accessorKey: "completed",
+			cell: ({ getValue }: any) => (getValue() ? "已完成" : "未完成"),
+			enableSorting: true,
+		},
+		{
+			header: "Object ID",
+			accessorKey: "objectId",
+			cell: ({ getValue }: any) => <ObjectLink objectId={getValue()} noTruncate />,
+		},
+	];
 
 	const leftPane = {
 		panel: <OwnedCoins id={address} />,
@@ -100,6 +136,14 @@ function AddressResult({ address }: { address: string }) {
 
 	return (
 		<TabHeader title="Owned Objects" noGap>
+			{/* 子地址列表卡片 */}
+			<Card bg="white/80" border="gray45" spacing="lg">
+				<TableHeader>子地址列表</TableHeader>
+				<div className="mt-4">
+					<TableCard sortTable data={subAddressesData} columns={subAddressesColumns} />
+				</div>
+			</Card>
+
 			{isMediumOrAbove ? (
 				<div className="h-300">
 					<SplitPanes
