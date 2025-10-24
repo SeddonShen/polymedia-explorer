@@ -24,19 +24,19 @@ function Home() {
 	// 主账户地址列表（示例数据）：
 	const mainAccountsData = [
 		{
-			address: "0x123456789",
+			address: "0x0feb54a725aa357ff2f5bc6bb023c05b310285bd861275a30521f339a434ebb3",
 			subTokenCount: 1000,
 			subAddressCount: 10,
 			subAddressCompletedCount: 5,
 		},
 		{
-			address: "0x987654321",
+			address: "0xcde6dbe01902be1f200ff03dbbd149e586847be8cee15235f82750d9b06c0e04",
 			subTokenCount: 500,
 			subAddressCount: 5,
 			subAddressCompletedCount: 3,
 		},
 		{
-			address: "0x567890123",
+			address: "0xa9ebbc8a4e3ff8087ff40a5f7e65618b7500993a44f6c0bedebbfe78408309b9",
 			subTokenCount: 200,
 			subAddressCount: 2,
 			subAddressCompletedCount: 1,
@@ -94,7 +94,7 @@ function Home() {
 						{/* <div style={{ gridArea: "polymedia" }}>
 							<PolymediaCard />
 						</div> */}
-						<div>
+						<div style={{ gridArea: "polymedia" }}>
 							<Card bg="white/80" border="gray45" spacing="lg">
 								<TableHeader>主账户地址列表</TableHeader>
 								<div className="mt-4">
@@ -130,7 +130,7 @@ function Home() {
 						className="min-h-[320px] sm:min-h-[380px] lg:min-h-[460px] xl:min-h-[520px]"
 					>
 						<ErrorBoundary>
-							<Suspense fallback={<Card height="full" />}>
+							<Suspense fallback={<Card height="full" />}> 
 								<ValidatorMap minHeight="100%" />
 							</Suspense>
 						</ErrorBoundary>
