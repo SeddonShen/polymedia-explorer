@@ -10,6 +10,10 @@ import { PolymediaCard } from "~/components/PolymediaCard";
 import { ErrorBoundary } from "~/components/error-boundary/ErrorBoundary";
 import { TopValidatorsCard } from "~/components/top-validators-card/TopValidatorsCard";
 import { TabHeader } from "~/ui/Tabs";
+import { Card } from "~/ui/Card";
+import { TableCard } from "~/ui/TableCard";
+import { TableHeader } from "~/ui/TableHeader";
+import { AddressLink } from "~/ui/InternalLink";
 
 // const ValidatorMap = lazy(() => import('../../components/validator-map'));
 
@@ -17,6 +21,49 @@ const TRANSACTIONS_LIMIT = 25;
 
 function Home() {
 	const isSuiTokenCardEnabled = false;
+	// 主账户地址列表（示例数据）：
+	const mainAccountsData = [
+		{
+			address: "0x123456789",
+			subTokenCount: 1000,
+			subAddressCount: 10,
+			subAddressCompletedCount: 5,
+		},
+		{
+			address: "0x987654321",
+			subTokenCount: 500,
+			subAddressCount: 5,
+			subAddressCompletedCount: 3,
+		},
+		{
+			address: "0x567890123",
+			subTokenCount: 200,
+			subAddressCount: 2,
+			subAddressCompletedCount: 1,
+		},
+	];
+	const mainAccountsColumns = [
+		{
+			header: "地址",
+			accessorKey: "address",
+			cell: ({ getValue }: any) => <AddressLink address={getValue()} noTruncate />,
+		},
+		{
+			header: "子账户token个数",
+			accessorKey: "subTokenCount",
+			enableSorting: true,
+		},
+		{
+			header: "子账户地址个数",
+			accessorKey: "subAddressCount",
+			enableSorting: true,
+		},
+		{
+			header: "已完成的子账户地址个数",
+			accessorKey: "subAddressCompletedCount",
+			enableSorting: true,
+		},
+	];
 	return (
 		<PageLayout
 			gradient={{
@@ -44,8 +91,16 @@ function Home() {
 						{/* <div style={{ gridArea: "accounts" }}>
 							<AccountsCardGraph />
 						</div> */}
-						<div style={{ gridArea: "polymedia" }}>
+						{/* <div style={{ gridArea: "polymedia" }}>
 							<PolymediaCard />
+						</div> */}
+						<div>
+							<Card bg="white/80" border="gray45" spacing="lg">
+								<TableHeader>主账户地址列表</TableHeader>
+								<div className="mt-4">
+									<TableCard sortTable data={mainAccountsData} columns={mainAccountsColumns} />
+								</div>
+							</Card>
 						</div>
 					</div>
 				),

@@ -8,14 +8,11 @@ export function PolymediaCard() {
 			<div className="flex h-full flex-col gap-4 overflow-hidden">
 
 				<div className="md:text-heading4 text-heading6 text-steel-darker font-semibold">
-					Polymedia Explorer
+					Projects Index
 				</div>
 
 				<div className="break-words text-pBody font-semibold text-steel-dark">
-					The original Sui Explorer, maintained by&nbsp;
-					<ButtonOrLink href="https://x.com/juzybits" className="break-words text-pBody font-semibold text-steel-dark">
-						<span className="text-hero-dark font-semibold">@juzybits</span>
-					</ButtonOrLink>
+					Description
 				</div>
 
 				<div className="break-words text-pBody font-semibold text-steel-dark">
