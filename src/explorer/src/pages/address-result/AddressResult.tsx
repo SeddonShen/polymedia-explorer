@@ -3,7 +3,7 @@
 
 import { isSuiNSName, useResolveSuiNSAddress, useResolveSuiNSName } from "@mysten/core";
 import { Domain32 } from "@mysten/icons";
-import { LoadingIndicator } from "@mysten/ui";
+import { LoadingIndicator, Button } from "@mysten/ui";
 import { useParams } from "react-router-dom";
 import { PageLayout } from "~/components/Layout/PageLayout";
 import { OwnedCoins } from "~/components/OwnedCoins";
@@ -20,6 +20,9 @@ import { Card } from "~/ui/Card";
 import { TableHeader } from "~/ui/TableHeader";
 import { TableCard } from "~/ui/TableCard";
 import { AddressLink, ObjectLink } from "~/ui/InternalLink";
+import { Checkbox } from "~/ui/Checkbox";
+import { Input } from "~/ui/Input";
+import { useState } from "react";
 
 const LEFT_RIGHT_PANEL_MIN_SIZE = 30;
 const TOP_PANEL_MIN_SIZE = 20;
@@ -79,6 +82,68 @@ function AddressResult({ address }: { address: string }) {
 			cell: ({ getValue }: any) => <ObjectLink objectId={getValue()} noTruncate />,
 		},
 	];
+
+	// 选择列用的状态
+	const [selected, setSelected] = useState<Set<string>>(new Set());
+	const toggleSelect = (addr: string, checked: boolean) => {
+		setSelected((prev) => {
+			const next = new Set(prev);
+			if (checked) {
+				next.add(addr);
+			} else {
+				next.delete(addr);
+			}
+			return next;
+		});
+	};
+
+	const selectableColumns = [
+		{
+			header: "选择",
+			accessorKey: "select",
+			cell: ({ row }: any) => {
+				const addr = row.original.address as string;
+				const checked = selected.has(addr);
+				return (
+					<Checkbox
+						id={`chk-${addr}`}
+						checked={checked}
+						onCheckedChange={(value: boolean | "indeterminate") =>
+							toggleSelect(addr, value === true)
+						}
+					/>
+				);
+			},
+		},
+		{
+			header: "子地址",
+			accessorKey: "address",
+			cell: ({ getValue }: any) => <AddressLink address={getValue()} noTruncate />,
+		},
+		{
+			header: "代币个数",
+			accessorKey: "tokenCount",
+			enableSorting: true,
+		},
+		{
+			header: "是否已完成",
+			accessorKey: "completed",
+			cell: ({ getValue }: any) => (getValue() ? "已完成" : "未完成"),
+			enableSorting: true,
+		},
+		{
+			header: "Object ID",
+			accessorKey: "objectId",
+			cell: ({ getValue }: any) => <ObjectLink objectId={getValue()} noTruncate />,
+		},
+	];
+
+	const [recipient, setRecipient] = useState("");
+	const handleSend = () => {
+		// 这里仅做演示，实际发送逻辑可对接链上操作
+		console.log("Sending from sub-addresses:", Array.from(selected));
+		console.log("Recipient:", recipient);
+	};
 
 	const leftPane = {
 		panel: <OwnedCoins id={address} />,
@@ -143,6 +208,31 @@ function AddressResult({ address }: { address: string }) {
 					<TableCard sortTable data={subAddressesData} columns={subAddressesColumns} />
 				</div>
 			</Card>
+
+			{/* 子地址批量选择与发送 */}
+			<div className="mt-5">
+				<Card bg="white/80" border="gray45" spacing="lg">
+					<TableHeader>选择子地址并发送</TableHeader>
+					<div className="mt-4">
+						<TableCard sortTable data={subAddressesData} columns={selectableColumns} />
+					</div>
+					<div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+						<div className="flex-1">
+							<Input
+								label="接收方地址"
+								placeholder="输入接收方地址"
+								value={recipient}
+								onChange={(e) => setRecipient(e.target.value)}
+							/>
+						</div>
+						<div>
+							<Button onClick={handleSend} disabled={!recipient || selected.size === 0}>
+								发送
+							</Button>
+						</div>
+					</div>
+				</Card>
+			</div>
 
 			{isMediumOrAbove ? (
 				<div className="h-300">
