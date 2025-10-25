@@ -91,20 +91,15 @@ body,
 		.home-page-grid-container-top {
 			@apply grid-cols-[315px,1fr,1fr];
 			grid-template-areas:
-				'epoch polymedia polymedia'
-				'network polymedia polymedia'
-				/* 'network transactions accounts'
-				'epoch transactions accounts'; */
+				'polymedia polymedia polymedia'
+				'epoch network network';
 		}
 
 		.home-page-grid-container-top.with-token {
 			grid-template-areas:
-				'epoch   polymedia polymedia'
-				'network polymedia polymedia'
-				'token   polymedia polymedia'
-				/* 'network transactions accounts'
-				'epoch   transactions accounts'
-				'token   transactions accounts'; */
+				'polymedia polymedia polymedia'
+				'epoch   network network'
+				'token   network network';
 		}
 	}
 
